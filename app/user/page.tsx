@@ -47,21 +47,53 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return now.toLocaleDateString("en-US", options);
+  };
+
   const handleLogout = async () => {
     try {
       const response = await fetch("/api/auth/logout", {
         method: "POST",
       });
-
+      const description = getCurrentDateTime();
       if (response.ok) {
-        toast.success("Logout successful!");
+        toast("LogOut successful!", {
+          description,
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        });
         router.push("/login");
       } else {
-        toast.error("Logout failed. Please try again.");
+        toast("Logout failed. Please try again", {
+          description,
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        });
       }
     } catch (err) {
+      const description = getCurrentDateTime();
       console.error("Error:", err);
-      toast.error("Logout failed. Please try again.");
+      toast("Logout failed. Please try again", {
+        description,
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
     }
   };
   const handleDashboardRedirect = () => {

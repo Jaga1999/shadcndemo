@@ -32,6 +32,20 @@ export function LoginForm({
   const [activeTab, setActiveTab] = useState("login");
   const router = useRouter();
 
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return now.toLocaleDateString("en-US", options);
+  };
+
+
   const handleSubmit = async (e: React.FormEvent, isRegister: boolean) => {
     e.preventDefault();
     setLoading(true);
@@ -53,23 +67,49 @@ export function LoginForm({
 
       const data = await response.json();
 
+      const description = getCurrentDateTime();
       if (response.ok) {
         if (!isRegister) {
-          toast.success("Login successful!");
+          toast("Login successful!", {
+            description,
+            action: {
+              label: "Undo",
+              onClick: () => console.log("Undo"),
+            },
+          });
           router.push("/user");
         } else {
-          toast.success("Registration successful! Please login.");
+          toast("Registration successful! Please login.", {
+            description,
+            action: {
+              label: "Undo",
+              onClick: () => console.log("Undo"),
+            },
+          });
           setEmail("");
           setPassword("");
           setName("");
           setActiveTab("login");
         }
       } else {
-        toast.error(data.message || "Something went wrong.");
+        toast.error(data.message || "Something went wrong.", {
+          description,
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        });
       }
     } catch (err) {
+      const description = getCurrentDateTime();
       console.error("Error:", err);
-      toast.error("Failed to process the request. Please try again.");
+      toast.error("Failed to process the request. Please try again.", {
+        description,
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
     } finally {
       setLoading(false);
     }
