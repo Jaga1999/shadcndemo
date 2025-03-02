@@ -11,6 +11,8 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { ModeToggle } from "@/components/mode-toggle";
 
 // Define a TypeScript interface for a User
 interface IUser {
@@ -45,21 +47,40 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  const handleLogout = () => {
-    fetch("/api/auth/logout", {
-      method: "POST",
-    })
-      .then(() => router.push("/login"))
-      .catch((err) => console.error("Logout failed:", err));
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        toast.success("Logout successful!");
+        router.push("/login");
+      } else {
+        toast.error("Logout failed. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      toast.error("Logout failed. Please try again.");
+    }
+  };
+  const handleDashboardRedirect = () => {
+    router.push("/dashboard");
   };
 
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Users</h1>
-        <Button onClick={handleLogout} variant="outline">
-          Logout
-        </Button>
+        <div className="flex items-center gap-2">
+          <ModeToggle />
+          <Button onClick={handleDashboardRedirect} variant="outline">
+            Dashboard
+          </Button>
+          <Button onClick={handleLogout} variant="outline">
+            Logout
+          </Button>
+        </div>
       </div>
 
       {loading ? (
