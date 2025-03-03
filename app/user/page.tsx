@@ -11,7 +11,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { toastMessage } from "@/lib/utils";
 import { ModeToggle } from "@/components/mode-toggle";
 
 // Define a TypeScript interface for a User
@@ -47,53 +47,20 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return now.toLocaleDateString("en-US", options);
-  };
-
   const handleLogout = async () => {
     try {
       const response = await fetch("/api/auth/logout", {
         method: "POST",
       });
-      const description = getCurrentDateTime();
       if (response.ok) {
-        toast("LogOut successful!", {
-          description,
-          action: {
-            label: "Undo",
-            onClick: () => console.log("Undo"),
-          },
-        });
+        toastMessage("LogOut successful!");
         router.push("/login");
       } else {
-        toast("Logout failed. Please try again", {
-          description,
-          action: {
-            label: "Undo",
-            onClick: () => console.log("Undo"),
-          },
-        });
+        toastMessage("Logout failed. Please try again", "error");
       }
     } catch (err) {
-      const description = getCurrentDateTime();
       console.error("Error:", err);
-      toast("Logout failed. Please try again", {
-        description,
-        action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
-        },
-      });
+      toastMessage("Logout failed. Please try again", "error");
     }
   };
   const handleDashboardRedirect = () => {

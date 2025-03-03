@@ -19,7 +19,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { toast } from "sonner";
+import { toastMessage } from "@/lib/utils";
 
 export function LoginForm({
   className,
@@ -31,20 +31,6 @@ export function LoginForm({
   const [name, setName] = useState(""); // Only used in register mode
   const [activeTab, setActiveTab] = useState("login");
   const router = useRouter();
-
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return now.toLocaleDateString("en-US", options);
-  };
-
 
   const handleSubmit = async (e: React.FormEvent, isRegister: boolean) => {
     e.preventDefault();
@@ -67,49 +53,23 @@ export function LoginForm({
 
       const data = await response.json();
 
-      const description = getCurrentDateTime();
       if (response.ok) {
         if (!isRegister) {
-          toast("Login successful!", {
-            description,
-            action: {
-              label: "Undo",
-              onClick: () => console.log("Undo"),
-            },
-          });
+          toastMessage("Login successful!");
           router.push("/user");
         } else {
-          toast("Registration successful! Please login.", {
-            description,
-            action: {
-              label: "Undo",
-              onClick: () => console.log("Undo"),
-            },
-          });
+          toastMessage("Registration successful! Please login.");
           setEmail("");
           setPassword("");
           setName("");
           setActiveTab("login");
         }
       } else {
-        toast.error(data.message || "Something went wrong.", {
-          description,
-          action: {
-            label: "Undo",
-            onClick: () => console.log("Undo"),
-          },
-        });
+        toastMessage(data.message || "Something went wrong.", "error");
       }
     } catch (err) {
-      const description = getCurrentDateTime();
       console.error("Error:", err);
-      toast.error("Failed to process the request. Please try again.", {
-        description,
-        action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
-        },
-      });
+      toastMessage("Failed to process the request. Please try again.", "error");
     } finally {
       setLoading(false);
     }
