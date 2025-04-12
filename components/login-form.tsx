@@ -56,7 +56,7 @@ export function LoginForm({
       if (response.ok) {
         if (!isRegister) {
           toastMessage("Login successful!");
-          router.push("/user");
+          router.push("/dashboard");
         } else {
           toastMessage("Registration successful! Please login.");
           setEmail("");
