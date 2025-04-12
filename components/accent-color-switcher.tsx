@@ -1,24 +1,30 @@
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 const accentColors = [
-  { name: "Red", color: "red" },
-  { name: "Blue", color: "blue" },
-  { name: "Green", color: "green" },
-  { name: "Purple", color: "purple" },
+  { color: "#FF0000" }, // Red
+  { color: "#0000FF" }, // Blue
+  { color: "#00FF00" }, // Green
+  { color: "#800080" }, // Purple
+  { color: "#FFA500" }, // Orange
+  { color: "#FFD700" }, // Gold
+  { color: "#FF1493" }, // Deep Pink
+  { color: "#00FFFF" }, // Cyan
+  { color: "#8B4513" }, // Saddle Brown
+  { color: "#4B0082" }, // Indigo
+  { color: "#FF4500" }, // Orange Red
+  { color: "#2E8B57" }, // Sea Green
 ];
 
 export function AccentColorSwitcher() {
-  const [selectedColor, setSelectedColor] = useState(accentColors[0].color);
+  const [selectedColor, setSelectedColor] = React.useState(accentColors[0].color);
 
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
@@ -29,22 +35,23 @@ export function AccentColorSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-          <span className="sr-only">Change Accent Color</span>
           <div
             className="w-4 h-4 rounded-full"
-            style={{ backgroundColor: `var(--accent-color, ${selectedColor})` }}
+            style={{ backgroundColor: selectedColor }}
           />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {accentColors.map((color) => (
-          <DropdownMenuItem
-            key={color.color}
-            onClick={() => handleColorChange(color.color)}
-          >
-            {color.name}
-          </DropdownMenuItem>
-        ))}
+      <DropdownMenuContent align="end" className="w-[150px] p-2">
+        <div className="grid grid-cols-4 gap-2">
+          {accentColors.map((item) => (
+            <button
+              key={item.color}
+              className="w-7 h-7 rounded-full cursor-pointer hover:scale-110 transition-transform"
+              style={{ backgroundColor: item.color }}
+              onClick={() => handleColorChange(item.color)}
+            />
+          ))}
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
