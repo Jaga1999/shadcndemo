@@ -4,6 +4,8 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 @layer base {
@@ -43,7 +45,10 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
     --warning: oklch(0.84 0.16 84);
-  --warning-foreground: oklch(0.28 0.07 46);
+    --warning-foreground: oklch(0.28 0.07 46);
+    --base-font-size: 12px;  /* Reduced from 14px to 12px */
+    --chart-scale: 0.8;      /* Added chart scaling factor */
+    
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -79,8 +84,12 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
     --warning: oklch(0.41 0.11 46);
-  --warning-foreground: oklch(0.99 0.02 95);
+    --warning-foreground: oklch(0.99 0.02 95);
   }
+}
+
+html {
+  font-size: var(--base-font-size);
 }
 
 @layer base {
@@ -91,6 +100,24 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@media (min-width: 768px) {
+  .recharts-wrapper {
+    font-size: 0.75rem;  /* Reduced from 0.875rem */
+  }
+}
+
+@media (min-width: 1024px) {
+  .recharts-wrapper {
+    font-size: 0.875rem;  /* Reduced from 1rem */
+  }
+}
+
+.recharts-wrapper {
+  transform: scale(var(--chart-scale));
+  transform-origin: top left;
+}
+
 @theme inline {
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);

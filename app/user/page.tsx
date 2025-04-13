@@ -2,6 +2,23 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AppSidebar } from "@/components/app-sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableHeader,
@@ -10,9 +27,9 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { toastMessage } from "@/lib/utils";
 import { ModeToggle } from "@/components/mode-toggle";
+import { AccentColorSwitcher } from "@/components/accent-color-switcher";
+import { toastMessage } from "@/lib/utils";
 
 // Define a TypeScript interface for a User
 interface IUser {
@@ -23,8 +40,9 @@ interface IUser {
 }
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<IUser[]>([]); // Specify the type of users as IUser[]
+  const [users, setUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -63,49 +81,74 @@ export default function UsersPage() {
       toastMessage("Logout failed. Please try again", "error");
     }
   };
-  const handleDashboardRedirect = () => {
-    router.push("/dashboard");
+
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Users</h1>
-        <div className="flex items-center gap-2">
-          <ModeToggle />
-          <Button onClick={handleDashboardRedirect} variant="outline">
-            Dashboard
-          </Button>
-          <Button onClick={handleLogout} variant="outline">
-            Logout
-          </Button>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href="#">
+                  User Management
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Users List</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <div className="ml-auto relative flex items-center gap-4">
+            <ModeToggle />
+            <AccentColorSwitcher />
+            <div onClick={togglePopup} className="cursor-pointer relative">
+              <Avatar>
+                <AvatarImage src="https://randomuser.me/api/portraits/men/75.jpg" alt="User Avatar" />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+              {isPopupOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2 z-10">
+                  <Button onClick={handleLogout} variant="outline" className="w-full">
+                    Logout
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+        <div className="container mx-auto p-6">
+          {loading ? (
+            <p>Loading...</p>
+          ) : users.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow key={user._id}>
+                    <TableCell>{user.username}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <p>No users found.</p>
+          )}
         </div>
-      </div>
-
-      {loading ? (
-        <p>Loading...</p>
-      ) : users.length > 0 ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {/* <TableHead>ID</TableHead> */}
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user._id}>
-                {/* <TableCell>{user._id}</TableCell> */}
-                <TableCell>{user.username}</TableCell>
-                <TableCell>{user.email}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      ) : (
-        <p>No users found.</p>
-      )}
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

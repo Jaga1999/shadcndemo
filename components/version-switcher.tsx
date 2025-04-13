@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react"
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,15 +13,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { VersionContext } from "./version-provider"
 
 export function VersionSwitcher({
-  versions,
-  defaultVersion,
+  versions
 }: {
   versions: string[]
-  defaultVersion: string
 }) {
-  const [selectedVersion, setSelectedVersion] = React.useState(defaultVersion)
+  const { version, setVersion } = React.useContext(VersionContext)
 
   return (
     <SidebarMenu>
@@ -37,8 +35,8 @@ export function VersionSwitcher({
                 <GalleryVerticalEnd className="size-4" />
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-semibold">Documentation</span>
-                <span className="">v{selectedVersion}</span>
+                <span className="font-semibold">Dashboard</span>
+                <span className="">v{version}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -47,13 +45,13 @@ export function VersionSwitcher({
             className="w-[--radix-dropdown-menu-trigger-width]"
             align="start"
           >
-            {versions.map((version) => (
+            {versions.map((v) => (
               <DropdownMenuItem
-                key={version}
-                onSelect={() => setSelectedVersion(version)}
+                key={v}
+                onSelect={() => setVersion(v)}
               >
-                v{version}{" "}
-                {version === selectedVersion && <Check className="ml-auto" />}
+                v{v}{" "}
+                {v === version && <Check className="ml-auto" />}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
