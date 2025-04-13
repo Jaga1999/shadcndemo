@@ -7,6 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getDecodedToken } from "@/lib/utils";
 
 const accentColors = [
   { color: "#FF0000" }, // Red
@@ -24,11 +25,40 @@ const accentColors = [
 ];
 
 export function AccentColorSwitcher() {
-  const [selectedColor, setSelectedColor] = React.useState(accentColors[0].color);
+  // Initialize state from JWT token immediately
+  const decoded = getDecodedToken();
+  console.log("Decoded token:", decoded); // Debugging line
+  console.log("Decoded preferences:", decoded?.preferences); // Debugging line
+  
+  const initialColor = decoded?.preferences?.accentColor || accentColors[0].color;
+  const [selectedColor, setSelectedColor] = React.useState(initialColor);
 
-  const handleColorChange = (color: string) => {
+  // Set initial color on mount
+  React.useEffect(() => {
+    document.documentElement.style.setProperty("--accent-color", initialColor);
+  }, [initialColor]);
+
+  const handleColorChange = async (color: string) => {
     setSelectedColor(color);
     document.documentElement.style.setProperty("--accent-color", color);
+
+    // Update preference in database if user is logged in
+      try {
+        await fetch('/api/users/preferences', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            preferences: {
+              accentColor: color
+            }
+          }),
+        });
+      } catch (error) {
+        console.error('Failed to update accent color preference:', error);
+      }
+    
   };
 
   return (

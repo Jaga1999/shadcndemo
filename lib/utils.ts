@@ -1,9 +1,39 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
+import jwt from 'jsonwebtoken';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export interface DecodedToken {
+  email: string;
+  id: string;
+  username: string;
+  preferences: {
+    theme: 'light' | 'dark' | 'system';
+    accentColor: string;
+};
+}
+
+export function getDecodedToken(): DecodedToken | null {
+  try {
+    // Get the token from the cookie
+    const token = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('token='))
+      ?.split('=')[1];
+
+    if (!token) return null;
+
+    // Decode the token
+    const decoded = jwt.decode(token) as DecodedToken;
+    return decoded;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
+  }
 }
 
 const getCurrentDateTime = () => {

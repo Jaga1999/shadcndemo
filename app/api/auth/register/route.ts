@@ -24,10 +24,27 @@ export async function POST(request: Request) {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new user
-        const newUser = await User.create({ email, password: hashedPassword, username: name });
+        // Create a new user with default preferences
+        const newUser = await User.create({ 
+            email, 
+            password: hashedPassword, 
+            username: name,
+            preferences: {
+                theme: 'system',
+                accentColor: '#0000FF'
+            }
+        });
+        
         console.log('Created User:', newUser);
-        return NextResponse.json({ message: 'User registered successfully', user: newUser }, { status: 201 });
+        return NextResponse.json({ 
+            message: 'User registered successfully', 
+            user: {
+                id: newUser._id,
+                email: newUser.email,
+                username: newUser.username,
+                preferences: newUser.preferences
+            }
+        }, { status: 201 });
     } catch (error) {
         console.error('Error in register route:', error);
         return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
