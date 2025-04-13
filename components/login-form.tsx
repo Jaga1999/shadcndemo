@@ -20,7 +20,6 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { toastMessage } from "@/lib/utils";
-import { useTheme } from "next-themes";
 
 export function LoginForm({
   className,
@@ -29,19 +28,9 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(""); // Only used in register mode
   const [activeTab, setActiveTab] = useState("login");
   const router = useRouter();
-  const { setTheme } = useTheme();
-
-  const applyUserPreferences = (preferences: { theme: string; accentColor: string }) => {
-    if (preferences.theme) {
-      setTheme(preferences.theme);
-    }
-    if (preferences.accentColor) {
-      document.documentElement.style.setProperty("--accent-color", preferences.accentColor);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent, isRegister: boolean) => {
     e.preventDefault();
@@ -49,6 +38,7 @@ export function LoginForm({
 
     try {
       const apiRoute = isRegister ? "/api/auth/register" : "/api/auth/login";
+
       const body = isRegister
         ? { name, email, password }
         : { email, password };
@@ -65,10 +55,6 @@ export function LoginForm({
 
       if (response.ok) {
         if (!isRegister) {
-          // Apply user preferences immediately after successful login
-          if (data.user?.preferences) {
-            applyUserPreferences(data.user.preferences);
-          }
           toastMessage("Login successful!");
           router.push("/dashboard");
         } else {

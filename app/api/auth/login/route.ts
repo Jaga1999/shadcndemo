@@ -27,37 +27,25 @@ export async function POST(request: Request) {
         if (!isPasswordValid) {
             return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
         }
-        // Create JWT token with user information including preferences
+
+        // Create JWT token
         const token = jwt.sign(
-            { 
-                email: user.email, 
-                id: user._id,
-                username: user.username,
-                preferences: user.preferences
-            },
-            process.env.JWT_SECRET as string,
-            { expiresIn: '1h' }
+            { email: user.email, id: user._id },
+            process.env.JWT_SECRET as string, // Ensure you set this environment variable
+            { expiresIn: '1h' } // Token expires in 1 hour
         );
 
         // Set cookie in the response
-        const response = NextResponse.json({ 
-            message: 'Login successful',
-            user: {
-                id: user._id,
-                email: user.email,
-                username: user.username,
-                preferences: user.preferences
-            }
-        }, { status: 200 });
-        
+        const response = NextResponse.json({ message: 'Login successful' }, { status: 200 });
         response.cookies.set('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            path: '/',
-            maxAge: 3600,
-            sameSite: 'strict'
+            httpOnly: true,  // Makes the cookie inaccessible to client-side JavaScript
+            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            path: '/',       // Cookie is available for the entire site
+            maxAge: 3600,    // Cookie expires in 1 hour
+            sameSite: 'strict' // Prevent CSRF attacks
         });
 
+        // Send token in the response
         return response;
     } catch (error) {
         console.error('Error in login route:', error);
