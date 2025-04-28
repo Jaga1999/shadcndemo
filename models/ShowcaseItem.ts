@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const showcaseSchema = new mongoose.Schema({
+const showcaseItemSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -9,30 +9,16 @@ const showcaseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  status: {
+  code: {
     type: String,
-    enum: ['active', 'archived', 'draft'],
-    default: 'draft',
+    required: true,
   },
-  priority: {
-    type: Number,
-    min: 1,
-    max: 5,
-    default: 3,
+  component: {
+    type: String,
+    required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  }
+}, {
+  timestamps: true,
 });
 
-showcaseSchema.pre('save', function(next) {
-  this.updatedAt = new Date();
-  next();
-});
-
-export const ShowcaseItem = mongoose.models.ShowcaseItem || mongoose.model('ShowcaseItem', showcaseSchema);
+export const ShowcaseItem = mongoose.models.ShowcaseItem || mongoose.model('ShowcaseItem', showcaseItemSchema);
