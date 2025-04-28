@@ -40,7 +40,7 @@
   --sidebar-ring: 217.2 91.2% 59.8%;
   --warning: oklch(0.84 0.16 84);
   --warning-foreground: oklch(0.28 0.07 46);
-  --base-font-size: 12px;  /* Reduced from 14px to 12px */  /* Added chart scaling factor */
+  --base-font-size: 14px;  /* Reduced from 14px to 12px */  /* Added chart scaling factor */
 }
 
 .dark {

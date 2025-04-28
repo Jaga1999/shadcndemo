@@ -10,6 +10,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Add your viewport meta here */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body>
         <ThemeProvider
           attribute="class"
