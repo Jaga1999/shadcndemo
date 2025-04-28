@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { LayoutDashboard, Users } from "lucide-react";
+import { LayoutDashboard, Users, Layers } from "lucide-react";
 import { VersionSwitcher } from "@/components/version-switcher";
 import {
   Sidebar,
@@ -36,6 +36,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <a href="/user">
                 <Users className="h-4 w-4" />
                 Users
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <a href="/showcase">
+                <Layers className="h-4 w-4" />
+                Components
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -1,26 +1,31 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react"
+import * as React from "react";
+import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { VersionContext } from "./version-provider"
+} from "@/components/ui/sidebar";
+import { VersionContext } from "./version-provider";
 
 export function VersionSwitcher({
   versions
 }: {
   versions: string[]
 }) {
-  const { version, setVersion } = React.useContext(VersionContext)
+  const { version, setVersion } = React.useContext(VersionContext);
+
+  const handleVersionChange = (newVersion: string) => {
+    setVersion(newVersion);
+    // You could add a toast message here if desired
+  };
 
   return (
     <SidebarMenu>
@@ -36,9 +41,9 @@ export function VersionSwitcher({
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
                 <span className="font-semibold">Dashboard</span>
-                <span className="">v{version}</span>
+                <span className="text-xs text-muted-foreground">v{version}</span>
               </div>
-              <ChevronsUpDown className="ml-auto" />
+              <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -48,15 +53,15 @@ export function VersionSwitcher({
             {versions.map((v) => (
               <DropdownMenuItem
                 key={v}
-                onSelect={() => setVersion(v)}
+                onSelect={() => handleVersionChange(v)}
               >
-                v{v}{" "}
-                {v === version && <Check className="ml-auto" />}
+                v{v}
+                {v === version && <Check className="ml-auto size-4" />}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

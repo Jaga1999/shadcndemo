@@ -95,16 +95,16 @@ const funnelConfig = {
 
 export function DashboardV2() {
   return (
-    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 text-[14px]">
-      <Card className="h-[320px]">
-        <CardHeader className="min-h-[70px]">
+    <div className="dashboard-grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <Card className="col-span-1">
+        <CardHeader>
           <CardTitle>Performance Matrix</CardTitle>
           <CardDescription>KPI Analysis</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent>
           <ChartContainer 
             config={radarConfig}
-            className="h-full w-full"
+            className="h-[300px]"
           >
             <RadarChart data={radarData}>
               <PolarGrid stroke="var(--accent-color)" />
@@ -139,15 +139,15 @@ export function DashboardV2() {
         </CardFooter>
       </Card>
 
-      <Card className="h-[320px]">
-        <CardHeader className="min-h-[70px]">
+      <Card className="col-span-1">
+        <CardHeader>
           <CardTitle>Customer Analysis</CardTitle>
           <CardDescription>Satisfaction Correlation</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent>
           <ChartContainer 
             config={scatterConfig}
-            className="h-full w-full"
+            className="h-[300px]"
           >
             <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
               <CartesianGrid />
@@ -174,15 +174,15 @@ export function DashboardV2() {
         </CardFooter>
       </Card>
 
-      <Card className="h-[320px]">
-        <CardHeader className="min-h-[70px]">
+      <Card className="col-span-1">
+        <CardHeader>
           <CardTitle>Composite Analysis</CardTitle>
           <CardDescription>Revenue Growth Trends</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent>
           <ChartContainer 
             config={composedConfig}
-            className="h-full w-full"
+            className="h-[300px]"
           >
             <ComposedChart data={composedData}>
               <CartesianGrid stroke="#f5f5f5" />
@@ -215,15 +215,15 @@ export function DashboardV2() {
         </CardFooter>
       </Card>
 
-      <Card className="col-span-full h-[320px]">
-        <CardHeader className="min-h-[70px]">
+      <Card className="col-span-full">
+        <CardHeader>
           <CardTitle>Conversion Funnel</CardTitle>
           <CardDescription>Sales Pipeline Stages</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent>
           <ChartContainer 
             config={funnelConfig}
-            className="h-full w-full"
+            className="h-[300px]"
           >
             <FunnelChart>
               <Funnel

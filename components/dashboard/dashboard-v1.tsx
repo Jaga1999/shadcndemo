@@ -104,16 +104,16 @@ const treemapConfig = {
 
 export function DashboardV1() {
   return (
-    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      <Card className="h-[320px]">
-        <CardHeader className="min-h-[70px]">
+    <div className="dashboard-grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <Card className="col-span-1">
+        <CardHeader>
           <CardTitle>Sales Trends</CardTitle>
           <CardDescription>Monthly Sales Overview</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent>
           <ChartContainer 
             config={areaConfig}
-            className="h-full w-full"
+            className="h-[300px]"
           >
             <AreaChart data={areaData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -151,15 +151,15 @@ export function DashboardV1() {
         </CardFooter>
       </Card>
 
-      <Card className="h-[320px]">
-        <CardHeader className="min-h-[70px]">
+      <Card className="col-span-1">
+        <CardHeader>
           <CardTitle>Product Performance</CardTitle>
           <CardDescription>Sales vs Target</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent>
           <ChartContainer 
             config={barConfig}
-            className="h-full w-full"
+            className="h-[300px]"
           >
             <BarChart data={barData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -191,15 +191,15 @@ export function DashboardV1() {
         </CardFooter>
       </Card>
 
-      <Card className="h-[320px]">
-        <CardHeader className="min-h-[70px]">
+      <Card className="col-span-1">
+        <CardHeader>
           <CardTitle>Weekly Metrics</CardTitle>
           <CardDescription>Traffic and Users</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent>
           <ChartContainer 
             config={lineConfig}
-            className="h-full w-full"
+            className="h-[300px]"
           >
             <LineChart data={lineData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -235,15 +235,15 @@ export function DashboardV1() {
         </CardFooter>
       </Card>
 
-      <Card className="col-span-full h-[320px]">
-        <CardHeader className="min-h-[70px]">
+      <Card className="col-span-full">
+        <CardHeader>
           <CardTitle>Market Distribution</CardTitle>
           <CardDescription>Platform Usage Share</CardDescription>
         </CardHeader>
-        <CardContent className="h-[200px]">
+        <CardContent>
           <ChartContainer 
             config={treemapConfig}
-            className="h-full w-full"
+            className="h-[300px]"
           >
             <Treemap
               data={treemapData}

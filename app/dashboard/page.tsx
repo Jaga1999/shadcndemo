@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
@@ -24,11 +24,13 @@ import { AccentColorSwitcher } from "@/components/accent-color-switcher";
 import { toastMessage } from "@/lib/utils";
 import { DashboardV1 } from "@/components/dashboard/dashboard-v1";
 import { DashboardV2 } from "@/components/dashboard/dashboard-v2";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { VersionContext } from "@/components/version-provider";
 
 export default function Page() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const router = useRouter();
+  const { version } = useContext(VersionContext);
+
   const handleLogout = async () => {
     try {
       const response = await fetch("/api/auth/logout", {
@@ -54,7 +56,7 @@ export default function Page() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-background px-6">
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
@@ -86,20 +88,9 @@ export default function Page() {
             </div>
           </div>
         </header>
-        <div className="flex-1 p-4">
+        <div className="flex-1 space-y-4 p-4">
           <div className="dashboard-container">
-            <Tabs defaultValue="dashboard-v1" className="w-full">
-              <TabsList>
-                <TabsTrigger value="dashboard-v1">Dashboard V1</TabsTrigger>
-                <TabsTrigger value="dashboard-v2">Dashboard V2</TabsTrigger>
-              </TabsList>
-              <TabsContent value="dashboard-v1">
-                <DashboardV1 />
-              </TabsContent>
-              <TabsContent value="dashboard-v2">
-                <DashboardV2 />
-              </TabsContent>
-            </Tabs>
+            {version === "1.0" ? <DashboardV1 /> : <DashboardV2 />}
           </div>
         </div>
       </SidebarInset>
